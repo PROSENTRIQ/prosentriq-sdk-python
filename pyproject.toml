@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prosentriq-sdk"
+version = "2.0.0"
+description = "Prosentriq Sensor SDK: send canonical (OCSF-aligned) events, receive directives, and run the Prosentriq sensors."
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+# Deliberately tiny: the SDK runs on customer hosts and appliances.
+dependencies = ["cryptography>=41"]
+
+[project.optional-dependencies]
+aws = ["boto3>=1.28"]
+test = ["pytest>=7"]
+
+[project.scripts]
+prosentriq-sensor = "prosentriq_sdk.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["prosentriq_sdk*"]

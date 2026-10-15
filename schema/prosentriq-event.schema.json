@@ -1,0 +1,812 @@
+{
+  "$defs": {
+    "Actor": {
+      "additionalProperties": true,
+      "properties": {
+        "user": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/User"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "process": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Process"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Actor",
+      "type": "object"
+    },
+    "Api": {
+      "additionalProperties": true,
+      "properties": {
+        "operation": {
+          "maxLength": 256,
+          "title": "Operation",
+          "type": "string"
+        },
+        "service": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Service"
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "title": "Api",
+      "type": "object"
+    },
+    "Cloud": {
+      "additionalProperties": true,
+      "properties": {
+        "provider": {
+          "anyOf": [
+            {
+              "maxLength": 32,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "account_uid": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Account Uid"
+        }
+      },
+      "title": "Cloud",
+      "type": "object"
+    },
+    "Endpoint": {
+      "additionalProperties": true,
+      "properties": {
+        "ip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ip"
+        },
+        "port": {
+          "anyOf": [
+            {
+              "maximum": 65535,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Port"
+        },
+        "hostname": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hostname"
+        }
+      },
+      "title": "Endpoint",
+      "type": "object"
+    },
+    "EventClass": {
+      "enum": [
+        1001,
+        1007,
+        2004,
+        3002,
+        4001,
+        4002,
+        4003,
+        6003
+      ],
+      "title": "EventClass",
+      "type": "integer"
+    },
+    "FileObj": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "anyOf": [
+            {
+              "maxLength": 4096,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-fA-F0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "size": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size"
+        },
+        "entropy": {
+          "anyOf": [
+            {
+              "maximum": 8,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entropy"
+        }
+      },
+      "title": "FileObj",
+      "type": "object"
+    },
+    "Finding": {
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "maxLength": 512,
+          "title": "Title",
+          "type": "string"
+        },
+        "uid": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uid"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "K8s": {
+      "properties": {
+        "namespace": {
+          "anyOf": [
+            {
+              "maxLength": 253,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "pod": {
+          "anyOf": [
+            {
+              "maxLength": 253,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Image"
+        }
+      },
+      "title": "K8s",
+      "type": "object"
+    },
+    "Metadata": {
+      "additionalProperties": true,
+      "properties": {
+        "uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        },
+        "version": {
+          "default": "2.0.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "#/$defs/Product"
+        }
+      },
+      "required": [
+        "uid"
+      ],
+      "title": "Metadata",
+      "type": "object"
+    },
+    "Process": {
+      "additionalProperties": true,
+      "properties": {
+        "pid": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pid"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "cmd_line": {
+          "anyOf": [
+            {
+              "maxLength": 4096,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cmd Line"
+        },
+        "parent_pid": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Pid"
+        },
+        "user": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/User"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "file": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FileObj"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "container_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container Id"
+        }
+      },
+      "title": "Process",
+      "type": "object"
+    },
+    "Product": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "default": "prosentriq",
+          "maxLength": 128,
+          "title": "Name",
+          "type": "string"
+        },
+        "vendor_name": {
+          "default": "Prosentriq",
+          "maxLength": 128,
+          "title": "Vendor Name",
+          "type": "string"
+        },
+        "version": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        }
+      },
+      "title": "Product",
+      "type": "object"
+    },
+    "ProsentriqExt": {
+      "additionalProperties": false,
+      "properties": {
+        "sensor_type": {
+          "enum": [
+            "linux_engine",
+            "kubernetes",
+            "log_relay",
+            "cloud_collector",
+            "windows",
+            "macos",
+            "sdk",
+            "v1_agent",
+            "incumbent"
+          ],
+          "title": "Sensor Type",
+          "type": "string"
+        },
+        "os": {
+          "maxLength": 32,
+          "title": "Os",
+          "type": "string"
+        },
+        "host_id": {
+          "maxLength": 128,
+          "title": "Host Id",
+          "type": "string"
+        },
+        "signal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signal"
+        },
+        "signal_details": {
+          "additionalProperties": true,
+          "title": "Signal Details",
+          "type": "object"
+        },
+        "k8s": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/K8s"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "sensor_type",
+        "os",
+        "host_id"
+      ],
+      "title": "ProsentriqExt",
+      "type": "object"
+    },
+    "Query": {
+      "additionalProperties": true,
+      "properties": {
+        "hostname": {
+          "maxLength": 255,
+          "title": "Hostname",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hostname"
+      ],
+      "title": "Query",
+      "type": "object"
+    },
+    "Traffic": {
+      "additionalProperties": true,
+      "properties": {
+        "bytes_in": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bytes In"
+        },
+        "bytes_out": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bytes Out"
+        },
+        "packets": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packets"
+        }
+      },
+      "title": "Traffic",
+      "type": "object"
+    },
+    "User": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "uid": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uid"
+        }
+      },
+      "title": "User",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "class_uid": {
+      "$ref": "#/$defs/EventClass"
+    },
+    "activity_id": {
+      "default": 0,
+      "maximum": 99,
+      "minimum": 0,
+      "title": "Activity Id",
+      "type": "integer"
+    },
+    "time": {
+      "format": "date-time",
+      "title": "Time",
+      "type": "string"
+    },
+    "severity_id": {
+      "default": 1,
+      "maximum": 6,
+      "minimum": 0,
+      "title": "Severity Id",
+      "type": "integer"
+    },
+    "status_id": {
+      "anyOf": [
+        {
+          "maximum": 99,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status Id"
+    },
+    "message": {
+      "anyOf": [
+        {
+          "maxLength": 2048,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Message"
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+    "prosentriq": {
+      "$ref": "#/$defs/ProsentriqExt"
+    },
+    "src_endpoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Endpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "dst_endpoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Endpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "actor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Actor"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "process": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Process"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "file": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FileObj"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "query": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Query"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "traffic": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Traffic"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "finding": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Finding"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "cloud": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Cloud"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "api": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Api"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "unmapped": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unmapped"
+    }
+  },
+  "required": [
+    "class_uid",
+    "time",
+    "metadata",
+    "prosentriq"
+  ],
+  "title": "Prosentriq canonical event v2.0.0 (OCSF-aligned)",
+  "type": "object",
+  "$id": "https://api.prosentriq.com/v2/public/schema"
+}
