@@ -1,0 +1,29 @@
+# Publishes prosentriq-sdk to PyPI when prosentriq-core's release mirrors a
+# tag here. Trusted Publishing: PyPI trusts this workflow in the "pypi"
+# environment, so no token is stored anywhere. The tag sets the version
+# (v2.0.0-rc.1 becomes 2.0.0rc1), so a release candidate is never published
+# as the release itself.
+name: publish
+on:
+  push:
+    tags: ["v*"]
+permissions: { contents: read }
+jobs:
+  pypi:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: { name: pypi, url: "https://pypi.org/project/prosentriq-sdk/" }
+    permissions: { contents: read, id-token: write }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with: { python-version: "3.12" }
+      - name: Version from the tag
+        run: |
+          v=${GITHUB_REF_NAME#v}
+          pep=$(sed -E 's/-rc\.?([0-9]+)$/rc\1/; s/-beta\.?([0-9]+)$/b\1/; s/-alpha\.?([0-9]+)$/a\1/' <<< "$v")
+          [[ $pep =~ ^[0-9]+\.[0-9]+\.[0-9]+((a|b|rc)[0-9]+)?$ ]] || { echo "can't map $v to a PEP 440 version"; exit 1; }
+          sed -i -E "s/^version = \".*\"/version = \"$pep\"/" pyproject.toml
+          grep -x "version = \"$pep\"" pyproject.toml
+      - run: python -m pip install build==1.4.4 && python -m build
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33  # v1.14.2
